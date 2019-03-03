@@ -1,7 +1,7 @@
 import java.util.Date;
 import java.util.Random;
 
-public class Randomizer {
+class Randomizer {
 
     Date createDate() {
         Random random = new Random();
@@ -11,17 +11,9 @@ public class Randomizer {
         return new Date(year - 1900, month, day);
     }
 
-    int createIndex() {
+    int createPostcode() {
         Random r = new Random();
         return r.nextInt(100000) + 100000;
-    }
-
-    String createInn() {
-        Random random = new Random();
-        int tax = random.nextInt(10000);
-        int personal = random.nextInt(10000);
-        int check = 55;
-        return "77" + tax + personal + check;
     }
 
     int getRandomNumber() {
