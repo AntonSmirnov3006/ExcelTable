@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.gmail.antonsmirnov3006.Utils.convertGender;
 import static com.gmail.antonsmirnov3006.Utils.convertGenderBack;
+import static com.gmail.antonsmirnov3006.sql.SqlUtils.*;
 
 public class SqlHelper {
 
@@ -16,18 +17,14 @@ public class SqlHelper {
             new SimpleDateFormat("yyyy-MM-dd");
 
     public void write(List<Person> persons) {
-        String userName = "root";
-        String password = "1111";
-        String connectionUrl = "jdbc:mysql://localhost:3306/schema_tinkoff?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         try {
-            Connection connection = DriverManager.getConnection(connectionUrl, userName, password);
+            Connection connection = DriverManager.getConnection(CONNECTION_URL, USERNAME, PASSWORD);
 
             connection.createStatement().executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
             connection.createStatement().executeUpdate("TRUNCATE address");
@@ -38,8 +35,6 @@ public class SqlHelper {
             for (Person currentPerson : persons) {
                 String addressUpdateCommand = "insert into address (postcode, country, region, city, " +
                         "street, house, flat) values " + getSqlAddress(currentPerson);
-
-                System.out.println("check - " + addressUpdateCommand);
 
                 PreparedStatement addressStatement = connection.prepareStatement(addressUpdateCommand, Statement.RETURN_GENERATED_KEYS);
 
@@ -53,8 +48,6 @@ public class SqlHelper {
                     if (generatedKeys.next()) {
                         String personUpdateCommand = "insert into persons (surname, name, middlename, birthday, " +
                                 "gender, inn, address_id) values " + getSqlPerson(currentPerson, generatedKeys.getLong(1));
-
-                        System.out.println("check - " + personUpdateCommand);
 
                         PreparedStatement personStatement = connection.prepareStatement(personUpdateCommand, Statement.RETURN_GENERATED_KEYS);
                         personStatement.executeUpdate();
@@ -74,18 +67,14 @@ public class SqlHelper {
 
         List<Person> result = new ArrayList<>();
 
-        String userName = "root";
-        String password = "1111";
-        String connectionUrl = "jdbc:mysql://localhost:3306/schema_tinkoff?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         try {
-            Connection connection = DriverManager.getConnection(connectionUrl, userName, password);
+            Connection connection = DriverManager.getConnection(CONNECTION_URL, USERNAME, PASSWORD);
 
             String query = "SELECT * FROM address " +
                     "INNER JOIN persons ON address.id=persons.address_id;";
