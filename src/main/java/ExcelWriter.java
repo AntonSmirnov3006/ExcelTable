@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ class ExcelWriter {
         try {
             workbook.write(outputStream);
 
-            System.out.println("Файл создан. Путь: " + file);
+            System.out.println("Файл создан. Путь: " + convertRelativePathToAbsolutePath(file));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,6 +52,11 @@ class ExcelWriter {
         }
     }
 
+    private String convertRelativePathToAbsolutePath(File file) {
+        return FileSystems.getDefault().getPath(file.toString())
+                .normalize().toAbsolutePath().toString();
+    }
+
     private void fillCells(List<Person> persons) {
         String pattern = "dd-MM-yyyy";
         DateFormat df = new SimpleDateFormat(pattern);
@@ -60,39 +66,27 @@ class ExcelWriter {
 
             Row row = sheet.createRow(i + 1);
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue(person.secondName);
-            cell = row.createCell(1);
-            cell.setCellValue(person.firstName);
-            cell = row.createCell(2);
-            cell.setCellValue(person.middleName);
-            cell = row.createCell(3);
-            cell.setCellValue(person.age);
-            cell = row.createCell(4);
-            if (person.gender == Gender.FEMALE) {
-                cell.setCellValue("Ж");
-            } else if (person.gender == Gender.MALE) {
-                cell.setCellValue("М");
+            String gender = "";
+            if (person.getGender() == Gender.FEMALE) {
+                gender = "Ж";
+            } else if (person.getGender() == Gender.MALE) {
+                gender = "М";
             }
-            cell = row.createCell(5);
-            cell.setCellValue(df.format(person.dateOfBirth));
-            cell = row.createCell(6);
-            cell.setCellValue(person.inn);
-            cell = row.createCell(7);
-            cell.setCellValue(person.postalCode);
-            cell = row.createCell(8);
-            cell.setCellValue(person.country);
-            cell = row.createCell(9);
-            cell.setCellValue(person.region);
-            cell = row.createCell(10);
-            cell.setCellValue(person.city);
-            cell = row.createCell(11);
-            cell.setCellValue(person.street);
-            cell = row.createCell(12);
-            cell.setCellValue(person.house);
-            cell = row.createCell(13);
-            cell.setCellValue(person.flat);
+            String[] personArray = {person.getSecondName(), person.getFirstName(), person.getMiddleName(),
+                    String.valueOf(person.getAge()), gender, df.format(person.getDateOfBirth()), person.getInn(),
+                    person.getPostalCode(), person.getCountry(), person.getRegion(),
+                    person.getCity(), person.getStreet(), person.getHouse(), person.getFlat()
+            };
+
+            for (int j = 0; j < personArray.length; j++) {
+                fillCell(row, j, personArray[j]);
+            }
         }
+    }
+
+    private void fillCell(Row row, int columnNumber, String secondName) {
+        Cell cell = row.createCell(columnNumber);
+        cell.setCellValue(secondName);
     }
 
     private void setupExcelSheet() {

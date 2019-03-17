@@ -6,6 +6,7 @@ public class Main {
 
     private ExcelWriter excelWriter = new ExcelWriter();
     private LocalGenerator localGenerator = new LocalGenerator(randomizer);
+    private RemoteGenerator remoteGenerator = new RemoteGenerator(randomizer);
 
     public static void main(String[] args) {
         Main helper = new Main();
@@ -23,8 +24,23 @@ public class Main {
     }
 
     private List<Person> createContent() {
-        int menNumber = randomizer.getRandomNumber();
-        int womenNumber = randomizer.getRandomNumber();
+        if (Utils.internetOn()) {
+            return createContentFromServer();
+        } else {
+            System.out.println("Отсутствует возможность подключиться к серверу. " +
+                    "Данные будут сгенерированы на основе локальных файлов.");
+            return createContentFromLocalFiles();
+        }
+    }
+
+    private List<Person> createContentFromServer() {
+        int number = randomizer.getRandomNumber(30);
+        return remoteGenerator.getPersonsFromServer(number);
+    }
+
+    private List<Person> createContentFromLocalFiles() {
+        int menNumber = randomizer.getRandomNumber(15);
+        int womenNumber = randomizer.getRandomNumber(15);
 
         List<Person> personList = localGenerator.getPersonsFromTxtFiles(menNumber, Gender.MALE);
         personList.addAll(localGenerator.getPersonsFromTxtFiles(womenNumber, Gender.FEMALE));

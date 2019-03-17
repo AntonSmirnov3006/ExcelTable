@@ -59,75 +59,36 @@ class LocalGenerator {
             Person person = new Person();
 
             if (gender == Gender.MALE) {
-                person.secondName = maleLastNames.get(i);
-                person.firstName = maleNames.get(i);
-                person.middleName = maleMiddleNames.get(i);
+                person.setSecondName(maleLastNames.get(i));
+                person.setFirstName(maleNames.get(i));
+                person.setMiddleName(maleMiddleNames.get(i));
             } else if (gender == Gender.FEMALE) {
-                person.secondName = femaleLastNames.get(i);
-                person.firstName = femaleNames.get(i);
-                person.middleName = femaleMiddleNames.get(i);
+                person.setSecondName(femaleLastNames.get(i));
+                person.setFirstName(femaleNames.get(i));
+                person.setMiddleName(femaleMiddleNames.get(i));
             }
 
-            person.dateOfBirth = randomizer.createDate();
+            person.setDateOfBirth(randomizer.createDate());
             Date now = new Date();
-            person.age = now.getYear() - person.dateOfBirth.getYear();
+            person.setAge(now.getYear() - person.getDateOfBirth().getYear());
 
-            person.gender = gender;
+            person.setGender(gender);
 
-            person.inn = generateInn();
-            person.postalCode = randomizer.createPostcode();
+            person.setInn(randomizer.generateInn());
+            person.setPostalCode(String.valueOf(randomizer.createPostcode()));
 
-            person.country = countries.get(i);
-            person.region = regions.get(i);
-            person.city = cities.get(i);
-            person.street = streets.get(i);
+            person.setCountry(countries.get(i));
+            person.setRegion(regions.get(i));
+            person.setCity(cities.get(i));
+            person.setStreet(streets.get(i));
 
-            person.house = String.valueOf(randomizer.getRandomNumber());
-            person.flat = String.valueOf(randomizer.getRandomNumber());
+            person.setHouse(String.valueOf(randomizer.getRandomNumber(50)));
+            person.setFlat(String.valueOf(randomizer.getRandomNumber(100)));
 
             result.add(person);
         }
 
         return result;
-    }
-
-    private String generateInn() {
-        int[] inn = {7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        int[] weights1 = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8, 0};
-        int[] weights2 = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8, 0};
-
-        for (int i = 2; i < 10; i++) {
-            inn[i] = generateNumber(0, 9);
-        }
-
-        int controlSum1 = 0;
-        for (int i = 0; i < weights1.length; i++) {
-            controlSum1 += weights1[i] * inn[i];
-        }
-        int number1 = controlSum1 % 11;
-        if (number1 > 9) {
-            number1 = number1 % 10;
-        }
-        inn[10] = number1;
-        int controlSum2 = 0;
-        for (int i = 0; i < weights1.length; i++) {
-            controlSum2 += weights2[i] * inn[i];
-        }
-        int number2 = controlSum2 % 11;
-        if (number2 > 9) {
-            number2 = number2 % 10;
-        }
-        inn[11] = number2;
-
-        String result = "";
-        for (int i = 0; i < inn.length; i++) {
-            result += inn[i];
-        }
-        return result;
-    }
-
-    private Integer generateNumber(Integer from, Integer to) {
-        return (from + (int) Math.round(Math.random() * (to - from)));
     }
 
 }
