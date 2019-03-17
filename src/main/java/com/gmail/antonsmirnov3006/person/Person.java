@@ -1,6 +1,8 @@
+package com.gmail.antonsmirnov3006.person;
+
 import java.util.Date;
 
-class Person {
+public class Person {
 
     private String secondName;
     private String firstName;
@@ -148,8 +150,4 @@ class Person {
                 ", flat='" + flat + '\'' +
                 '}';
     }
-}
-
-enum Gender {
-    MALE, FEMALE
 }

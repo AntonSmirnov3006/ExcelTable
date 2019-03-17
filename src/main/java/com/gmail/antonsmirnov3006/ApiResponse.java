@@ -1,3 +1,5 @@
+package com.gmail.antonsmirnov3006;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

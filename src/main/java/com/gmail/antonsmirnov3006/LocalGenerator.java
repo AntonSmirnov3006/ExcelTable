@@ -1,3 +1,8 @@
+package com.gmail.antonsmirnov3006;
+
+import com.gmail.antonsmirnov3006.person.Gender;
+import com.gmail.antonsmirnov3006.person.Person;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;

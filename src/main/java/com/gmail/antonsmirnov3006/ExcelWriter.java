@@ -1,3 +1,6 @@
+package com.gmail.antonsmirnov3006;
+
+import com.gmail.antonsmirnov3006.person.Person;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -12,6 +15,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.gmail.antonsmirnov3006.Utils.convertGender;
 
 class ExcelWriter {
 
@@ -66,12 +71,7 @@ class ExcelWriter {
 
             Row row = sheet.createRow(i + 1);
 
-            String gender = "";
-            if (person.getGender() == Gender.FEMALE) {
-                gender = "Ж";
-            } else if (person.getGender() == Gender.MALE) {
-                gender = "М";
-            }
+            String gender = convertGender(person.getGender());
             String[] personArray = {person.getSecondName(), person.getFirstName(), person.getMiddleName(),
                     String.valueOf(person.getAge()), gender, df.format(person.getDateOfBirth()), person.getInn(),
                     person.getPostalCode(), person.getCountry(), person.getRegion(),

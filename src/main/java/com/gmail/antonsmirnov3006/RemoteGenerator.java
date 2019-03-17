@@ -1,3 +1,7 @@
+package com.gmail.antonsmirnov3006;
+
+import com.gmail.antonsmirnov3006.person.Gender;
+import com.gmail.antonsmirnov3006.person.Person;
 import com.google.gson.Gson;
 import io.restassured.response.Response;
 import org.json.JSONException;

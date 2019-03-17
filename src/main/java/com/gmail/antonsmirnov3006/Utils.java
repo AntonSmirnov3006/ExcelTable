@@ -1,9 +1,13 @@
+package com.gmail.antonsmirnov3006;
+
+import com.gmail.antonsmirnov3006.person.Gender;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-class Utils {
+public class Utils {
 
     static final String SERVER_URL = "https://randomuser.me/api/";
 
@@ -18,6 +22,23 @@ class Utils {
             throw new RuntimeException(e);
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    public static String convertGender(Gender gender) {
+        if (gender == Gender.FEMALE) {
+            return "Ж";
+        } else if (gender == Gender.MALE) {
+            return "М";
+        }
+        return "";
+    }
+
+    public static Gender convertGenderBack(String gender) {
+        if (gender.equals("Ж")) {
+            return Gender.FEMALE;
+        } else {
+            return Gender.MALE;
         }
     }
 
